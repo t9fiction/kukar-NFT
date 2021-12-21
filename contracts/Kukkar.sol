@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract DDUnion is ERC721Enumerable, Ownable {
+contract Kukkar is ERC721Enumerable, Ownable {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -18,7 +18,7 @@ contract DDUnion is ERC721Enumerable, Ownable {
     string public baseTokenURI;
 
     // Constructor
-    constructor(string memory baseURI) ERC721("DADDU UNION", "DDN") {
+    constructor(string memory baseURI) ERC721("Kukkar", "KKR") {
         setBaseURI(baseURI);
     }
 
@@ -33,7 +33,7 @@ contract DDUnion is ERC721Enumerable, Ownable {
     }
 
     // Function to reserver NFT by the owner
-    function reserveDDU(uint _reserve) public payable onlyOwner {
+    function reserveNFT(uint _reserve) public payable onlyOwner {
         uint256 totalMinted = _tokenIds.current();
         require(totalMinted.add(_reserve) <= MAX_SUPPLY, "Not Enough NFTs available");
         for (uint256 i = 0; i < _reserve; i++) {
