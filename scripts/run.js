@@ -16,11 +16,11 @@ async function main() {
   // We get the contract to deploy
   const Kukkar = await hre.ethers.getContractFactory("Kukkar");
   const baseTokenURI = "ipfs://Qmed9d68EAu5LUyA4sUj3PeVyfq4mzn8JRZNCt7bQg5ckT/";
-  const kukkar = await Kukkar.deploy("Hello, Hardhat!");
+  const kukkar = await Kukkar.deploy(baseTokenURI);
 
-  await kukkar.deployed(baseTokenURI);
+  await kukkar.deployed();
 
-  console.log("Daddu Coin deployed to:", kukkar.address);
+  console.log("Kukkar deployed to:", kukkar.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
