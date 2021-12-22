@@ -14,13 +14,13 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Kukkar = await hre.ethers.getContractFactory("Kukkar");
+  const Jahaz = await hre.ethers.getContractFactory("Jahaz");
   const baseTokenURI = "ipfs://Qmed9d68EAu5LUyA4sUj3PeVyfq4mzn8JRZNCt7bQg5ckT/";
-  const kukkar = await Kukkar.deploy(baseTokenURI);
+  const jahaz = await Jahaz.deploy(baseTokenURI);
 
-  await kukkar.deployed();
+  await jahaz.deployed();
 
-  console.log("Kukkar deployed to:", kukkar.address);
+  console.log("Jahaz are flying at ", jahaz.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

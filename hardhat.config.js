@@ -14,16 +14,16 @@ require('dotenv').config();
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-const PRIVATE_KEY = process.env["TEST_PRIVATE_KEY"];
+const {PRIVATE_KEY, API_URL} = process.env;
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.0",
+  solidity: "0.8.7",
   networks: {
     mumbai: {
-      url: "https://polygon-mumbai.g.alchemy.com/v2/I0u4Y4eYOo29BhQK1FJ5lZEPyVKAvLR9",
+      url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`]
     }
   }

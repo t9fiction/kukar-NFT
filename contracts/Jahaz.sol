@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.7;
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract Kukkar is ERC721Enumerable, Ownable {
+contract Jahaz is ERC721Enumerable, Ownable {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -18,7 +18,7 @@ contract Kukkar is ERC721Enumerable, Ownable {
     string public baseTokenURI;
 
     // Constructor
-    constructor(string memory baseURI) ERC721("Kukkar", "KKR") {
+    constructor(string memory baseURI) ERC721("Jahaz", "JHZ") {
         setBaseURI(baseURI);
     }
 
@@ -37,10 +37,9 @@ contract Kukkar is ERC721Enumerable, Ownable {
         uint256 totalMinted = _tokenIds.current();
         require(totalMinted.add(_reserve) <= MAX_SUPPLY, "Not Enough NFTs available");
         for (uint256 i = 0; i < _reserve; i++) {
-            _mint(msg.sender, totalMinted);
+            _safeMint(msg.sender, totalMinted);
             totalMinted = totalMinted++;
             _tokenIds.increment();
-            // _mintSingleNFT();
         }
     }
 
@@ -52,10 +51,9 @@ contract Kukkar is ERC721Enumerable, Ownable {
         require(msg.value >= PRICE.mul(_count),"Not enough Ether");
 
         for (uint256 i = 0; i < _count; i++) {
-            _mint(msg.sender, totalMinted);
+            _safeMint(msg.sender, totalMinted);
             totalMinted = totalMinted++;
             _tokenIds.increment();
-            // _mintSingleNFT();
         }
 
     }
@@ -80,5 +78,4 @@ contract Kukkar is ERC721Enumerable, Ownable {
         (bool success, ) = (_to).call{value: balance}("");
         require(success, "Transfer failed.");
     }
-
 }
