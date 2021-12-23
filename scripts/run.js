@@ -20,7 +20,7 @@ async function main() {
 
   await saga.deployed();
 
-  console.log("Jahaz are flying at ", saga.address);
+  console.log("Saga is flying at ", saga.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
