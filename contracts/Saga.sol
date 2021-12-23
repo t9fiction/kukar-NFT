@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract Jahaz is ERC721Enumerable, Ownable {
+contract Saga is ERC721Enumerable, Ownable {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -18,7 +18,7 @@ contract Jahaz is ERC721Enumerable, Ownable {
     string public baseTokenURI;
 
     // Constructor
-    constructor(string memory baseURI) ERC721("Jahaz", "JHZ") {
+    constructor(string memory baseURI) ERC721("Saga", "SAGA") {
         setBaseURI(baseURI);
     }
 
@@ -32,14 +32,21 @@ contract Jahaz is ERC721Enumerable, Ownable {
         baseTokenURI = _baseTokenURI;
     }
 
+    function _mintSingleNFT() private {
+        uint256 newTokenID = _tokenIds.current();
+        _safeMint(msg.sender, newTokenID);
+        _tokenIds.increment();
+    }
+
     // Function to reserver NFT by the owner
-    function reserveNFT(uint _reserve) public payable onlyOwner {
+    function reserveNFT(uint256 _reserve) public payable onlyOwner {
         uint256 totalMinted = _tokenIds.current();
-        require(totalMinted.add(_reserve) <= MAX_SUPPLY, "Not Enough NFTs available");
+        require(
+            totalMinted.add(_reserve) <= MAX_SUPPLY,
+            "Not Enough NFTs available"
+        );
         for (uint256 i = 0; i < _reserve; i++) {
-            _safeMint(msg.sender, totalMinted);
-            totalMinted = totalMinted++;
-            _tokenIds.increment();
+            _mintSingleNFT();
         }
     }
 
@@ -47,32 +54,36 @@ contract Jahaz is ERC721Enumerable, Ownable {
     function _mintNFTs(uint256 _count) public payable {
         uint256 totalMinted = _tokenIds.current();
         require(totalMinted.add(_count) <= MAX_SUPPLY, "Not Enough NFTs");
-        require(_count > 0 && _count <= 5,"Minted NFTs shud be greater then 0 and less then 5");
-        require(msg.value >= PRICE.mul(_count),"Not enough Ether");
+        require(
+            _count > 0 && _count <= 5,
+            "Minted NFTs shud be greater then 0 and less then 5"
+        );
+        require(msg.value >= PRICE.mul(_count), "Not enough Ether");
 
         for (uint256 i = 0; i < _count; i++) {
-            _safeMint(msg.sender, totalMinted);
-            totalMinted = totalMinted++;
-            _tokenIds.increment();
+            _mintSingleNFT();
         }
-
     }
 
     // Getting all tokens owned by a particular account
     // If you plan on giving any sort of utility to your NFT holders,
     // you would want to know which NFTs from your collection each user holds.
-    function ownerOfTokens(address _tokenOwner) external view returns(uint[] memory) {
-        uint _tokenCount = balanceOf(_tokenOwner);
-        uint[] memory tokenId = new uint256[](_tokenCount);
-        for (uint256 i = 0; i <_tokenCount; i++){
+    function ownerOfTokens(address _tokenOwner)
+        external
+        view
+        returns (uint256[] memory)
+    {
+        uint256 _tokenCount = balanceOf(_tokenOwner);
+        uint256[] memory tokenId = new uint256[](_tokenCount);
+        for (uint256 i = 0; i < _tokenCount; i++) {
             tokenId[i] = tokenOfOwnerByIndex(_tokenOwner, i);
         }
         return tokenId;
     }
 
     // Withdrawing ether to wallet of owner
-    function withdraw(address payable _to) external payable onlyOwner{
-        uint balance = address(this).balance;
+    function withdraw(address payable _to) external payable onlyOwner {
+        uint256 balance = address(this).balance;
         require(balance > 0, "No ethers available");
         // _to.transfer(balance); Became obsolete now after May 2021
         (bool success, ) = (_to).call{value: balance}("");
